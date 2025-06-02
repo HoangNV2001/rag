@@ -23,5 +23,5 @@ docs/_*
 notebooks/.ipynb_checkpoints
 
 # Models
-**/huggingface
+**/huggingface/hub
 **/ngc/hub
