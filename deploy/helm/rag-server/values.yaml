@@ -22,7 +22,7 @@ image:
   pullPolicy: IfNotPresent
 
 server:
-  workers: 8
+  workers: 1
 
 resources:
   limits:
@@ -55,12 +55,12 @@ envVars:
   APP_RETRIEVER_TOPK: "10"
 
   ##===LLM Model specific configurations===
-  APP_LLM_MODELNAME: "nvidia/llama-3.3-nemotron-super-49b-v1"
+  APP_LLM_MODELNAME: "meta/llama-3.1-8b-instruct"
   # URL on which LLM model is hosted. If "", Nvidia hosted API is used
   APP_LLM_SERVERURL: "nim-llm:8000"
 
   ##===Query Rewriter Model specific configurations===
-  APP_QUERYREWRITER_MODELNAME: "nvidia/llama-3.3-nemotron-super-49b-v1"
+  APP_QUERYREWRITER_MODELNAME: "meta/llama-3.1-8b-instruct"
   # URL on which query rewriter model is hosted. If "", Nvidia hosted API is used
   APP_QUERYREWRITER_SERVERURL: "nim-llm:8000"
 
@@ -91,7 +91,7 @@ envVars:
   ENABLE_MULTITURN: "True"
   # enable query rewriting for multiturn conversation in the rag chain.
   # This will improve accuracy of the retrieiver pipeline but increase latency due to an additional LLM call
-  ENABLE_QUERYREWRITER: "False"
+  ENABLE_QUERYREWRITER: "True"
   # number of last n chat messages to consider from the provided conversation history
   CONVERSATION_HISTORY: "5"
 
@@ -104,7 +104,7 @@ envVars:
 
   # === Reflection ===
   # enable reflection (context relevance and response groundedness checking) in the rag chain
-  ENABLE_REFLECTION: "False"
+  ENABLE_REFLECTION: "True"
   # Maximum number of context relevance loop iterations
   MAX_REFLECTION_LOOP: "3"
   # Minimum relevance score threshold (0-2)
@@ -112,7 +112,7 @@ envVars:
   # Minimum groundedness score threshold (0-2)
   RESPONSE_GROUNDEDNESS_THRESHOLD: "1"
   # reflection llm
-  REFLECTION_LLM: "mistralai/mixtral-8x22b-instruct-v0.1"
+  REFLECTION_LLM: "" # "meta/llama-3.1-8b-instruct" "mistralai/mixtral-8x22b-instruct-v0.1"
   # reflection llm server url. If "", Nvidia hosted API is used
   REFLECTION_LLM_SERVERURL: ""
 
@@ -321,7 +321,7 @@ nim-llm:
   service:
     name: "nim-llm"
   image:
-      repository: nvcr.io/nim/nvidia/llama-3.3-nemotron-super-49b-v1
+      repository: nvcr.io/nim/meta/llama-3.1-8b-instruct
       pullPolicy: IfNotPresent
       tag: "1.8.3"
   resources:
@@ -331,7 +331,7 @@ nim-llm:
       nvidia.com/gpu: 1
   model:
     ngcAPIKey: ""
-    name: "nvidia/llama-3.3-nemotron-super-49b-v1"
+    name: "meta/llama-3.1-8b-instruct"
 
 
 nvidia-nim-llama-32-nv-embedqa-1b-v2:
@@ -475,10 +475,10 @@ frontend:
     password: ""
   service:
     type: NodePort
-    port: 3000
+    port: 3116
   envVars:
     - name: NEXT_PUBLIC_MODEL_NAME
-      value: "nvidia/llama-3.3-nemotron-super-49b-v1"
+      value: "meta/llama-3.1-8b-instruct"
     - name: NEXT_PUBLIC_EMBEDDING_MODEL
       value: "nvidia/llama-3.2-nv-embedqa-1b-v2"
     - name: NEXT_PUBLIC_RERANKER_MODEL

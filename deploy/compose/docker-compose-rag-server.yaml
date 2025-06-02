@@ -8,8 +8,8 @@ services:
       # Set context to repo's root directory
       context: ../../
       dockerfile: src/Dockerfile
-    # start the server on port 8081 with 8 workers for improved latency on concurrent requests.
-    command: --port 8081 --host 0.0.0.0 --workers 8
+    # start the server on port 8181 with 8 workers for improved latency on concurrent requests.
+    command: --port 8181 --host 0.0.0.0 --workers 1 #8
 
     # Common customizations to the pipeline can be controlled using env variables
     environment:
@@ -35,7 +35,7 @@ services:
       VECTOR_DB_TOPK: ${VECTOR_DB_TOPK:-100}
 
       ##===LLM Model specific configurations===
-      APP_LLM_MODELNAME: ${APP_LLM_MODELNAME:-"nvidia/llama-3.3-nemotron-super-49b-v1"}
+      APP_LLM_MODELNAME: ${APP_LLM_MODELNAME:-"meta/llama-3.1-8b-instruct}
       # url on which llm model is hosted. If "", Nvidia hosted API is used
       APP_LLM_SERVERURL: ${APP_LLM_SERVERURL-"nim-llm:8000"}
 
@@ -84,7 +84,7 @@ services:
       CONVERSATION_HISTORY: 5
 
       # Tracing
-      APP_TRACING_ENABLED: "False"
+      APP_TRACING_ENABLED: "True"
       # HTTP endpoint
       APP_TRACING_OTLPHTTPENDPOINT: http://otel-collector:4318/v1/traces
       # GRPC endpoint
@@ -113,9 +113,9 @@ services:
       REFLECTION_LLM_SERVERURL: ${REFLECTION_LLM_SERVERURL-"nim-llm-mixtral-8x22b:8000"}
 
     ports:
-      - "8081:8081"
+      - "8181:8181"
     expose:
-      - "8081"
+      - "8181"
     shm_size: 5gb
 
   # Sample UI container which interacts with APIs exposed by rag-server container
@@ -128,13 +128,13 @@ services:
       dockerfile: ./Dockerfile
       args:
         # Model name for LLM
-        NEXT_PUBLIC_MODEL_NAME: ${APP_LLM_MODELNAME:-nvidia/llama-3.3-nemotron-super-49b-v1}
+        NEXT_PUBLIC_MODEL_NAME: ${APP_LLM_MODELNAME:-meta/llama-3.1-8b-instruct}
         # Model name for embeddings
         NEXT_PUBLIC_EMBEDDING_MODEL: ${APP_EMBEDDINGS_MODELNAME:-nvidia/llama-3.2-nv-embedqa-1b-v2}
         # Model name for reranking
         NEXT_PUBLIC_RERANKER_MODEL: ${APP_RANKING_MODELNAME:-nvidia/llama-3.2-nv-rerankqa-1b-v2}
         # URL for rag server container
-        NEXT_PUBLIC_CHAT_BASE_URL: "http://rag-server:8081/v1"
+        NEXT_PUBLIC_CHAT_BASE_URL: "http://rag-server:8181/v1"
         # URL for ingestor container
         NEXT_PUBLIC_VDB_BASE_URL: "http://ingestor-server:8082/v1"
     ports:

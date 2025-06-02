@@ -1,5 +1,6 @@
 # Python Exclusions
 .venv
+.conda
 **__pycache__**
 
 # Helm Exclusions
@@ -20,3 +21,7 @@ docs/_*
 
 # Notebook checkpoints
 notebooks/.ipynb_checkpoints
+
+# Models
+**/huggingface
+**/ngc/hub

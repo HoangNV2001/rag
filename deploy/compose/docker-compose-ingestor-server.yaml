@@ -49,8 +49,8 @@ services:
 
       ##===NV-Ingest Extract Configurations==========
       APP_NVINGEST_EXTRACTTEXT: ${APP_NVINGEST_EXTRACTTEXT:-True}
-      APP_NVINGEST_EXTRACTTABLES: ${APP_NVINGEST_EXTRACTTABLES:-True}
-      APP_NVINGEST_EXTRACTCHARTS: ${APP_NVINGEST_EXTRACTCHARTS:-True}
+      APP_NVINGEST_EXTRACTTABLES: ${APP_NVINGEST_EXTRACTTABLES:-False} #True
+      APP_NVINGEST_EXTRACTCHARTS: ${APP_NVINGEST_EXTRACTCHARTS:-False} #True
       APP_NVINGEST_EXTRACTIMAGES: ${APP_NVINGEST_EXTRACTIMAGES:-False}
       APP_NVINGEST_PDFEXTRACTMETHOD: ${APP_NVINGEST_PDFEXTRACTMETHOD:-None} # Select from pdfium, nemoretriever_parse, None
       # Extract text by "page" only recommended for documents with pages like .pdf, .docx, etc.
@@ -165,7 +165,7 @@ services:
       - YOLOX_TABLE_STRUCTURE_HTTP_ENDPOINT=${YOLOX_TABLE_STRUCTURE_HTTP_ENDPOINT:-http://table-structure:8000/v1/infer}
       - YOLOX_TABLE_STRUCTURE_INFER_PROTOCOL=${YOLOX_TABLE_STRUCTURE_INFER_PROTOCOL:-grpc}
       # Incase of nvidia-hosted caption model, use the endpoint url as - https://ai.api.nvidia.com/v1/gr/meta/llama-3.2-11b-vision-instruct/chat/completions
-      - VLM_CAPTION_ENDPOINT=${VLM_CAPTION_ENDPOINT:-http://vlm-ms:8000/v1/chat/completions}
+      - VLM_CAPTION_ENDPOINT=${VLM_CAPTION_ENDPOINT:-https://ai.api.nvidia.com/v1/gr/meta/llama-3.2-11b-vision-instruct/chat/completions} #http://vlm-ms:8000/v1/chat/completions
       - VLM_CAPTION_MODEL_NAME=${VLM_CAPTION_MODEL_NAME:-meta/llama-3.2-11b-vision-instruct}
       - MODEL_PREDOWNLOAD_PATH=${MODEL_PREDOWNLOAD_PATH:-/workspace/models/}
     healthcheck:
